@@ -14,9 +14,15 @@ from shared.exceptions import NotFoundError
 router = APIRouter(prefix="/api-keys", tags=["api-keys"])
 
 @router.get("/", response_model=list[ApiKeyOut])
-async def list_keys(user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)) -> list[ApiKeyOut]:
+async def list_keys(request: Request, user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)) -> list[ApiKeyOut]:
     keys = await ApiKeyRepository(session).get_all(user.id)
-    return [ApiKeyOut.model_validate(k, from_attributes=True) for k in keys]
+    progress = request.app.state.sync_progress
+    out: list[ApiKeyOut] = []
+    for k in keys:
+        item = ApiKeyOut.model_validate(k, from_attributes=True)
+        item.syncing = progress.get(k.id, {}).get("state") == "syncing"
+        out.append(item)
+    return out
 
 @router.post("/", response_model=ApiKeyValidationResult, status_code=status.HTTP_201_CREATED)
 async def add_key(body: ApiKeyIn, request: Request, background: BackgroundTasks,
@@ -24,6 +30,7 @@ async def add_key(body: ApiKeyIn, request: Request, background: BackgroundTasks,
                   session: AsyncSession = Depends(get_session)) -> ApiKeyValidationResult:
     state = request.app.state
     registered = await register_key(session, state.gateway, state.ws_manager, state.trade_ingester, user=user, body=body)
+    state.sync_progress[registered.key.id] = {"state": "syncing"}
     background.add_task(
         run_initial_sync, state.ws_manager, state.trade_ingester, state.symbol_cache,
         registered.key, registered.client, user.plan, state.sync_progress
@@ -58,6 +65,7 @@ async def recheck_key(key_id: UUID, request: Request, background: BackgroundTask
     if fresh is None:
         raise NotFoundError("API key not found after re-validation")
 
+    state.sync_progress[fresh.id] = {"state": "syncing"}
     background.add_task(
         run_initial_sync, state.ws_manager, state.trade_ingester, state.symbol_cache,
         fresh, client, user.plan, state.sync_progress

@@ -64,6 +64,7 @@ export interface ApiKeyOut {
   last_error: string | null
   last_error_at: string | null
   created_at: string
+  syncing: boolean
   suspended: boolean
 }
 

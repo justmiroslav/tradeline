@@ -2,6 +2,7 @@ import { useCallback, useState } from "react"
 
 import type { ApiKeyErrorVariant } from "@/shared/lib/api-key-errors"
 import { getApiKeyErrorCode, getErrorDetail, mapApiKeyError } from "@/shared/lib/api-key-errors"
+import { EXCHANGE_CAPS } from "@/shared/lib/exchange-caps"
 import type { ApiKeyValidationResult, MarketType } from "@/shared/types/api"
 import type { ExchangeName } from "@/shared/ui/ExchangeMark"
 import { Modal } from "@/shared/ui/Modal"
@@ -62,9 +63,10 @@ export function AddApiKeyDialog({ open, onOpenChange }: AddApiKeyDialogProps) {
     setStep(3)
     setValidation({ kind: "pending" })
 
-    const selectedMarkets: MarketType[] = []
-    if (markets.spot) selectedMarkets.push("spot")
-    if (markets.futures) selectedMarkets.push("futures")
+    const picked: MarketType[] = []
+    if (markets.spot) picked.push("spot")
+    if (markets.futures) picked.push("futures")
+    const selectedMarkets: MarketType[] = (EXCHANGE_CAPS[exchange].unifiedMarkets || picked.length === 2) ? [] : picked
 
     mutation.mutate(
       {
