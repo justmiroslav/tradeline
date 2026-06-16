@@ -30,6 +30,7 @@ class ApiKeyOut(BaseModel):
     last_error: Optional[str]
     last_error_at: Optional[datetime]
     created_at: datetime
+    syncing: bool = False
 
     @computed_field
     @property

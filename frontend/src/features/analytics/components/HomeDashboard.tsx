@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react"
 
 import { AiInsightCard } from "@/features/ai"
-import { ApiKeysOverview } from "@/features/api-keys"
+import { ApiKeysOverview, useApiKeys } from "@/features/api-keys"
 import { type PeriodPreset, periodPresets, periodToAnalyticsFilters } from "@/features/filters"
 import { PositionsOverview } from "@/features/positions"
 import { spanDaysFromRange, useTradesRange } from "@/features/trades"
@@ -12,7 +12,7 @@ import { Segmented, type SegmentedOption } from "@/shared/ui/Segmented"
 
 import { useAnalytics } from "../hooks"
 import { EquityHero, type HeroStat } from "./EquityHero"
-import { ImportingState } from "./ImportingState"
+import { ImportingState, NoTradesYet } from "./ImportingState"
 
 const SHORT_LABEL: Record<PeriodPreset, string> = {
   all: "All", "7d": "7D", "30d": "30D", "90d": "90D", "1y": "1Y", custom: "Custom"
@@ -29,12 +29,14 @@ export function HomeDashboard() {
 
   const filters = useMemo(() => periodToAnalyticsFilters(period), [period])
   const query = useAnalytics(filters)
+  const keys = useApiKeys().data ?? []
 
   if (query.isPending) return <PlaceholderCard hint="Loading…" />
   if (query.isError) return <QueryError message="Couldn't load your dashboard" onRetry={() => query.refetch()} />
 
   const a = query.data
-  if (!a || (a.kpis.total_positions === 0 && a.open_exposure.count === 0 && a.incomplete_count === 0)) return <ImportingState />
+  if (!a || (a.kpis.total_positions === 0 && a.open_exposure.count === 0 && a.incomplete_count === 0))
+    return keys.some(k => k.syncing) ? <ImportingState /> : <NoTradesYet />
 
   const k = a.kpis
   const maxDd = num(k.max_drawdown)

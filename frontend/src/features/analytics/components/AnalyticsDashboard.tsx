@@ -16,7 +16,7 @@ import { BehavioralPanel } from "./BehavioralPanel"
 import { BreakdownPanel } from "./BreakdownPanel"
 import { CalendarBoard } from "./CalendarBoard"
 import { EquityHero, type HeroStat } from "./EquityHero"
-import { ImportingState } from "./ImportingState"
+import { ImportingState, NoTradesYet } from "./ImportingState"
 
 function heroStats(k: KpiOut): HeroStat[] {
   const expectancy = num(k.expectancy)
@@ -91,7 +91,7 @@ export function AnalyticsDashboard() {
       ) : !a || (a.kpis.total_positions === 0 && a.open_exposure.count === 0 && a.incomplete_count === 0) ? (
         active
           ? <PlaceholderCard title="No closed positions match these filters" hint="Try widening or clearing the filters above" />
-          : <ImportingState />
+          : keys.some(k => k.syncing) ? <ImportingState /> : <NoTradesYet />
       ) : a.kpis.total_positions === 0 ? (
         <PlaceholderCard title="No closed positions yet" hint="Analytics fills in once a position closes — your open ones are in the Journal" />
       ) : (

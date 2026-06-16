@@ -56,7 +56,8 @@ export function StepConnect({ exchange, initial, markets, onMarketsChange, onBac
     }
   })
 
-  const noneSelected = !markets.spot && !markets.futures
+  const marketsSelectable = !caps.unifiedMarkets
+  const noneSelected = marketsSelectable && !markets.spot && !markets.futures
   const toggleMarket = (m: MarketType) => onMarketsChange({ ...markets, [m]: !markets[m] })
 
   return (
@@ -122,12 +123,18 @@ export function StepConnect({ exchange, initial, markets, onMarketsChange, onBac
 
       <div className="flex flex-col gap-1.5">
         <span className="text-[12.5px] font-medium text-fg-1">Markets to sync</span>
-        <div className="flex flex-wrap items-center gap-2.5">
-          {caps.marketTypes.map(m => (
-            <MarketOption key={m} label={MARKET_LABEL[m]} checked={markets[m]} onToggle={() => toggleMarket(m)} />
-          ))}
-          {noneSelected && <span className="text-[11.5px] text-warn ml-1">Pick at least one market</span>}
-        </div>
+        {marketsSelectable ? (
+          <div className="flex flex-wrap items-center gap-2.5">
+            {caps.marketTypes.map(m => (
+              <MarketOption key={m} label={MARKET_LABEL[m]} checked={markets[m]} onToggle={() => toggleMarket(m)} />
+            ))}
+            {noneSelected && <span className="text-[11.5px] text-warn ml-1">Pick at least one market</span>}
+          </div>
+        ) : (
+          <p className="text-[12px] text-fg-2 leading-relaxed m-0">
+            {caps.name} is a unified account, so we sync all its spot and futures activity automatically
+          </p>
+        )}
       </div>
 
       <footer className="flex items-center justify-between pt-3.5 border-t border-line">

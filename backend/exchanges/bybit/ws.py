@@ -32,7 +32,13 @@ class BybitWSHandler(LoopingWSHandler):
             raise ConnectionError(str(exc.detail))
 
     async def _subscribe(self):
-        await self._ws.send_json({"op": "subscribe", "args": ["execution"]})
+        topics = []
+        if "spot" in self._capabilities:
+            topics.append("execution.spot")
+        if "futures" in self._capabilities:
+            topics.append("execution.linear")
+        if topics:
+            await self._ws.send_json({"op": "subscribe", "args": topics})
 
     async def _keepalive(self):
         while not self._stopped:
@@ -55,7 +61,7 @@ class BybitWSHandler(LoopingWSHandler):
         return False
 
     async def _on_message(self, data: dict):
-        if data.get("topic") != "execution":
+        if not str(data.get("topic", "")).startswith("execution"):
             return
 
         for row in data.get("data", []):
