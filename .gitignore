@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+build/
+dist/
+.venv
+.idea/
+backend/.env
+
+# Node
+node_modules/
+dist-ssr/
+*.local
+*.tsbuildinfo
+npm-debug.log*
+frontend/.env
+
+# Terraform / infra secrets
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.pem

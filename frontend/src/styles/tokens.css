@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+:root,
+[data-theme="dark"] {
+  --bg-0: oklch(0.16 0.008 260);
+  --bg-1: oklch(0.20 0.008 260);
+  --bg-2: oklch(0.235 0.009 260);
+  --bg-3: oklch(0.28 0.010 260);
+  --line: oklch(0.32 0.010 260);
+  --line-strong: oklch(0.40 0.012 260);
+  --fg-0: oklch(0.97 0.005 260);
+  --fg-1: oklch(0.78 0.010 260);
+  --fg-2: oklch(0.58 0.012 260);
+  --fg-3: oklch(0.42 0.012 260);
+  --accent: oklch(0.86 0.18 130);
+  --accent-fg: oklch(0.18 0.02 130);
+  --accent-glow: oklch(0.86 0.18 130 / 0.18);
+  --profit: oklch(0.78 0.16 155);
+  --profit-bg: oklch(0.78 0.16 155 / 0.12);
+  --loss: oklch(0.68 0.20 25);
+  --loss-bg: oklch(0.68 0.20 25 / 0.12);
+  --warn: oklch(0.82 0.16 75);
+  --warn-bg: oklch(0.82 0.16 75 / 0.14);
+  --pie-profit-1: oklch(0.80 0.13 230);
+  --pie-profit-2: oklch(0.83 0.13 85);
+  --pie-profit-3: oklch(0.79 0.14 300);
+  --pie-profit-4: oklch(0.82 0.11 200);
+  --pie-profit-5: oklch(0.80 0.14 350);
+  --pie-profit-6: oklch(0.82 0.13 55);
+  --pie-profit-7: oklch(0.78 0.13 270);
+  --pie-profit-8: oklch(0.81 0.13 25);
+  --pie-profit-9: oklch(0.79 0.13 320);
+  --pie-loss-1: oklch(0.58 0.17 25);
+  --pie-loss-2: oklch(0.60 0.14 55);
+  --pie-loss-3: oklch(0.55 0.15 300);
+  --pie-loss-4: oklch(0.55 0.13 250);
+  --pie-loss-5: oklch(0.57 0.16 350);
+  --pie-loss-6: oklch(0.56 0.12 80);
+  --pie-loss-7: oklch(0.52 0.14 285);
+  --pie-loss-8: oklch(0.58 0.16 10);
+  --pie-loss-9: oklch(0.53 0.12 220);
+  --shadow-card: 0 1px 0 0 oklch(1 0 0 / 0.03) inset, 0 1px 2px oklch(0 0 0 / 0.4);
+  --shadow-pop: 0 20px 60px -20px oklch(0 0 0 / 0.6), 0 1px 0 0 oklch(1 0 0 / 0.04) inset;
+  --x-binance: oklch(0.82 0.17 85);
+  --x-bybit: oklch(0.78 0.15 60);
+  --x-okx: oklch(0.95 0 0);
+  --x-bitget: oklch(0.72 0.18 250);
+}
+
+[data-theme="light"] {
+  --bg-0: oklch(0.985 0.003 260);
+  --bg-1: oklch(1 0 0);
+  --bg-2: oklch(0.965 0.004 260);
+  --bg-3: oklch(0.945 0.005 260);
+  --line: oklch(0.90 0.006 260);
+  --line-strong: oklch(0.82 0.008 260);
+  --fg-0: oklch(0.18 0.012 260);
+  --fg-1: oklch(0.36 0.012 260);
+  --fg-2: oklch(0.52 0.012 260);
+  --fg-3: oklch(0.65 0.010 260);
+  --accent: oklch(0.72 0.18 130);
+  --accent-fg: oklch(0.99 0.01 130);
+  --accent-glow: oklch(0.72 0.18 130 / 0.14);
+  --profit: oklch(0.58 0.18 155);
+  --profit-bg: oklch(0.58 0.18 155 / 0.10);
+  --loss: oklch(0.55 0.22 25);
+  --loss-bg: oklch(0.55 0.22 25 / 0.08);
+  --warn: oklch(0.70 0.18 75);
+  --warn-bg: oklch(0.70 0.18 75 / 0.12);
+  --pie-profit-1: oklch(0.62 0.15 230);
+  --pie-profit-2: oklch(0.68 0.14 85);
+  --pie-profit-3: oklch(0.58 0.16 300);
+  --pie-profit-4: oklch(0.64 0.13 200);
+  --pie-profit-5: oklch(0.62 0.16 350);
+  --pie-profit-6: oklch(0.66 0.15 55);
+  --pie-profit-7: oklch(0.58 0.15 270);
+  --pie-profit-8: oklch(0.62 0.16 25);
+  --pie-profit-9: oklch(0.60 0.16 320);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.04), 0 0 0 1px oklch(0 0 0 / 0.02);
+  --shadow-pop: 0 20px 60px -20px oklch(0 0 0 / 0.18);
+  --x-okx: oklch(0.20 0 0);
+}
+
+@keyframes tl-spin { to { transform: rotate(360deg); } }
+@keyframes tl-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes tl-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes tl-fade-soft { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tl-fade-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(4px); } }
+@keyframes tl-tab-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes tl-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes tl-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }

@@ -1,0 +1,36 @@
+#cloud-config
+package_update: true
+packages:
+  - tinyproxy
+  - iptables-persistent
+write_files:
+  - path: /etc/tinyproxy/tinyproxy.conf
+    permissions: '0644'
+    content: |
+      User tinyproxy
+      Group tinyproxy
+      Port ${proxy_port}
+      Timeout 600
+      LogLevel Info
+      MaxClients 200
+      Allow 0.0.0.0/0
+      BasicAuth ${proxy_user} ${proxy_pass}
+      ConnectPort 443
+      ConnectPort 563
+      ConnectPort 8443
+  - path: /etc/systemd/system/tinyproxy.service.d/override.conf
+    permissions: '0644'
+    content: |
+      [Service]
+      Type=simple
+      ExecStart=
+      ExecStart=/usr/bin/tinyproxy -d
+      PIDFile=
+      Restart=on-failure
+      RestartSec=2
+runcmd:
+  - systemctl daemon-reload
+  - systemctl enable tinyproxy
+  - systemctl restart tinyproxy
+  - iptables -I INPUT -p tcp --dport ${proxy_port} -j ACCEPT
+  - netfilter-persistent save
