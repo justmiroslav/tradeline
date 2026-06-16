@@ -9,14 +9,10 @@ on:
       - "Caddyfile"
       - ".github/workflows/backend.yml"
   pull_request:
-    paths:
-      - "backend/**"
-      - "docker-compose.prod.yml"
-      - "Caddyfile"
-      - ".github/workflows/backend.yml"
 
 jobs:
   test:
+    name: backend-tests
     runs-on: ubuntu-latest
     defaults:
       run:

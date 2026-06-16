@@ -7,12 +7,10 @@ on:
       - "frontend/**"
       - ".github/workflows/frontend.yml"
   pull_request:
-    paths:
-      - "frontend/**"
-      - ".github/workflows/frontend.yml"
 
 jobs:
   check:
+    name: frontend-build
     runs-on: ubuntu-latest
     defaults:
       run:
